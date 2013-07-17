@@ -1,0 +1,26 @@
+name: AnimalGuard
+version: maven-version-number
+authors: [cedeel,Lanky_Lord]
+main: net.fuzzyblocks.AnimalGuard.AnimalGuard
+depends: WorldGuard
+commands:
+   animalguard:
+       description: 'General AnimalGuard Commands'
+       usage: /animalguard /animalguard -reload
+permissions:
+  animalguard.admin:
+    description: admin permission node
+    children:
+      animalguard.notify: true
+      animalguard.bypass: true
+      animalguard.list: true
+    default: op
+  animalguard.notify:
+    description: notify permission node
+    default: op
+  animalguard.bypass:
+    description: bypass animalguardion.
+    default: op
+  animalguard.list:
+    description: List the configuration options.
+    default: op
