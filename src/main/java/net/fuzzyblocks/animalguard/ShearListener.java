@@ -20,22 +20,15 @@ public class ShearListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSheepShear(PlayerShearEntityEvent event) {
         if (event.getEntity() instanceof Sheep) {
-            Player player = event.getPlayer();
-            Location loc = event.getEntity().getLocation();
             if (event.isCancelled())
                 return;
+            Player player = event.getPlayer();
+            Location loc = event.getEntity().getLocation();
 
             if (plugin.getConfig().getBoolean("shear-protect"))
-                if (this.plugin.getWorldGuardPlugin().canBuild(player, loc)) {
-                    event.setCancelled(false);
-                    if (this.plugin.getConfig().getBoolean("debug"))
-                        player.sendMessage("Sheared sheep successfully!");
-                } else {
+                if (!this.plugin.getWorldGuardPlugin().canBuild(player, loc))
                     event.setCancelled(true);
-                    event.getPlayer().sendMessage(ChatColor.RED + "You cannot shear sheep here!");
-                    if (this.plugin.getConfig().getBoolean("debug"))
-                        player.sendMessage("Sheared sheep failed!");
-                }
+                    player.sendMessage(ChatColor.RED + "You cannot shear sheep here!");
         }
     }
 }
