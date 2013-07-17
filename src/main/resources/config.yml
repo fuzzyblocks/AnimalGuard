@@ -2,7 +2,7 @@
 notify: true
 notify-interval: 10
 notify-outdated: false
-update-check: false
+auto-download-updates: false
 debug: false
 protect-from-player:
      - CHICKEN

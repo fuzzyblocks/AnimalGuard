@@ -13,6 +13,7 @@ import org.mcstats.MetricsLite;
 
 import java.io.IOException;
 import java.util.List;
+import net.fuzzyblocks.animalguard.util.Updater;
 
 public class AnimalGuard extends JavaPlugin {
 
@@ -23,14 +24,13 @@ public class AnimalGuard extends JavaPlugin {
 
     public final NewDamageListeners dl = new NewDamageListeners(this);
     public final ShearListener shear = new ShearListener(this);
-    public final VersionCheck vc = new VersionCheck(this);
 
     //Enable stuff
+    @Override
     public void onEnable() {
         //event registration
         PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvents(dl, this);
-        pm.registerEvents(vc, this);
         pm.registerEvents(shear, this);
 
         //Check for WorldGuard
@@ -41,6 +41,13 @@ public class AnimalGuard extends JavaPlugin {
         //Check config for any errors.
         validateConfig();
         collectStats();
+
+        //Check for updates to plugin
+        Updater updater;
+        if (this.getConfig().getBoolean("auto-download-updates"))
+            updater = new Updater(this, "animalguard", this.getFile(), Updater.UpdateType.DEFAULT, false);
+        else
+            updater = new Updater(this, "animalguard", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
     }
 
     public void collectStats() {
@@ -88,6 +95,7 @@ public class AnimalGuard extends JavaPlugin {
         }
     }
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (commandLabel.equalsIgnoreCase("animalguard")) {
             if (args.length < 1) {
@@ -112,7 +120,7 @@ public class AnimalGuard extends JavaPlugin {
                 sender.sendMessage(success + "The following are protected from players");
                 for (String i : pfp) {
                     sender.sendMessage(i);
-                }
+            }
             }
             if (args[0].equalsIgnoreCase("-list") && args[1].equalsIgnoreCase("mobs") && sender.isOp() || sender.hasPermission("animalguard.list")) {
                 List<String> pfp = getConfig().getStringList("protect-from-monsters");
