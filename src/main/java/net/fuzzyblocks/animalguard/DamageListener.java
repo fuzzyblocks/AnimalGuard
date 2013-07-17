@@ -19,7 +19,6 @@ public class DamageListener implements Listener {
 
     String fail = ChatColor.DARK_RED + "You cannot attack mobs here!";
     public static AnimalGuard plugin;
-
     long lnt;
 
     public DamageListener(AnimalGuard instance) {
@@ -34,11 +33,10 @@ public class DamageListener implements Listener {
             Boolean debug = plugin.getConfig().getBoolean("debug");
             Player player = (Player) event.getDamager();
             Location loc = event.getEntity().getLocation();
-            if (debug == true) {
+            if (debug == true)
                 player.sendMessage(entity);
-            }
             // RegionManager rm = plugin.getWorldGuardPlugin().getRegionManager(loc.getWorld());
-            if (protect.contains(entity)) {
+            if (protect.contains(entity))
                 if (plugin.getWorldGuardPlugin().canBuild(player, loc) || player.hasPermission("animalprotect.bypass")) {
                     event.setCancelled(false);
                     if (debug == true) {
@@ -52,12 +50,9 @@ public class DamageListener implements Listener {
                         player.sendMessage("Attack failed");
                     }
                     player.sendMessage(fail);
-                    if (plugin.getConfig().getBoolean("notify")) {
+                    if (plugin.getConfig().getBoolean("notify"))
                         notifyAdmin(player);
-                    }
                 }
-
-            }
 
         }
     }
@@ -85,9 +80,8 @@ public class DamageListener implements Listener {
                         player.sendMessage("Attack failed");
                     }
                     player.sendMessage(fail);
-                    if (plugin.getConfig().getBoolean("notify")) {
+                    if (plugin.getConfig().getBoolean("notify"))
                         notifyAdmin(player);
-                    }
                 }
             }
         }
@@ -97,9 +91,8 @@ public class DamageListener implements Listener {
     public void onMonsterDamage(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Monster) {
             List<String> pfm = plugin.getConfig().getStringList("protect-from-monsters");
-            if (pfm.contains(event.getEntityType().toString())) {
+            if (pfm.contains(event.getEntityType().toString()))
                 event.setCancelled(true);
-            }
         }
     }
 
@@ -107,15 +100,13 @@ public class DamageListener implements Listener {
         long timesincelastnote = System.currentTimeMillis() - lnt;
         if (timesincelastnote > plugin.getConfig().getInt("notify-interval") * 1000) {
             lnt = System.currentTimeMillis();
-            if (DamageListener.plugin.getConfig().getBoolean("notify")) {
-                for (Player onlinePlayer : Bukkit.getServer().getOnlinePlayers()) {
+            if (DamageListener.plugin.getConfig().getBoolean("notify"))
+                for (Player onlinePlayer : Bukkit.getServer().getOnlinePlayers())
                     // Get a list of online players and check if they have permission/op //
                     if (onlinePlayer.hasPermission("animalprotect-notify") || onlinePlayer.isOp()) {
                         onlinePlayer.sendMessage(plugin.fail + player.getName() + " " + "Attempted to kill protected animals");
                         plugin.getLogger().info(player.getName() + " " + "Attempted to kill protected animals");
                     }
-                }
-            }
         }
     }
 }

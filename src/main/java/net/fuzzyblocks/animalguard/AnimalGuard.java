@@ -18,9 +18,7 @@ import net.fuzzyblocks.animalguard.util.Updater;
 public class AnimalGuard extends JavaPlugin {
 
     String success = ChatColor.GREEN + "[AnimalGuard]: ";
-
     String fail = ChatColor.RED + "[AnimalGuard]: ";
-
     public final DamageListener dl = new DamageListener(this);
     public final ShearListener shear = new ShearListener(this);
 
@@ -117,16 +115,14 @@ public class AnimalGuard extends JavaPlugin {
             if (args[0].equalsIgnoreCase("-list") && args[1].equalsIgnoreCase("player") && sender.isOp() || sender.hasPermission("animalguard.list")) {
                 List<String> pfp = getConfig().getStringList("protect-from-player");
                 sender.sendMessage(success + "The following are protected from players");
-                for (String i : pfp) {
+                for (String i : pfp)
                     sender.sendMessage(i);
-            }
             }
             if (args[0].equalsIgnoreCase("-list") && args[1].equalsIgnoreCase("mobs") && sender.isOp() || sender.hasPermission("animalguard.list")) {
                 List<String> pfp = getConfig().getStringList("protect-from-monsters");
                 sender.sendMessage(success + "The following are protected from mobs");
-                for (String i : pfp) {
+                for (String i : pfp)
                     sender.sendMessage(i);
-                }
             } else {
                 sender.sendMessage(fail + "You lack the necessary permissions to perform this action.");
                 return true;
