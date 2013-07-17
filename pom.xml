@@ -21,6 +21,10 @@
             <id>sk89q-repo</id>
             <url>http://maven.sk89q.com/repo/</url>
         </repository>
+        <repository>
+            <id>mcstats</id>
+            <url>http://repo.mcstats.org/content/repositories/public</url>
+        </repository>
     </repositories>
     <scm>
         <developerConnection>scm:git:git@github.com:cedeel/AnimalGuard.git</developerConnection>
