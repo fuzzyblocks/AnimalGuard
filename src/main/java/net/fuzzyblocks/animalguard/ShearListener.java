@@ -24,15 +24,14 @@ public class ShearListener implements Listener {
 		Location loc = event.getEntity().getLocation();
 		if(event.isCancelled()){return;}
 		
-		if(plugin.getConfig().getBoolean("shear-protect") == true){
+		if(plugin.getConfig().getBoolean("shear-protect")){
 		if(this.plugin.getWorldGuardPlugin().canBuild(player, loc)){
 			event.setCancelled(false);
-			if(this.plugin.getConfig().getBoolean("debug") == true){player.sendMessage("Sheared Sheep Sucessfully!");
-			return;
+			if(this.plugin.getConfig().getBoolean("debug")){player.sendMessage("Sheared sheep successfully!");
 			}
 		}else{event.setCancelled(true);
 		event.getPlayer().sendMessage(ChatColor.RED + "You cannot shear sheep here!");
-		if(this.plugin.getConfig().getBoolean("debug") == true){player.sendMessage("Sheared Sheep Failed!");
+		if(this.plugin.getConfig().getBoolean("debug")){player.sendMessage("Sheared sheep failed!");
 		}
 		}
 			

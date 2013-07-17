@@ -20,9 +20,8 @@ public class AnimalGuard extends JavaPlugin {
     String success = ChatColor.GREEN + "[AnimalGuard]: ";
 
     String fail = ChatColor.RED + "[AnimalGuard]: ";
-    public boolean outdated = false;
 
-    public final NewDamageListeners dl = new NewDamageListeners(this);
+    public final DamageListener dl = new DamageListener(this);
     public final ShearListener shear = new ShearListener(this);
 
     //Enable stuff
