@@ -21,7 +21,7 @@ public class ReloadCommand extends AnimalGuardCommand {
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
         // Set string on reload of config.
-        plugin.validateConfig();
-        sender.sendMessage(colour2 + ":: AnimalGuard configuration " + colour1 +"reloaded");
+        plugin.reloadConfig();
+        sender.sendMessage(colour2 + ":: AnimalGuard configuration " + colour1 + "reloaded");
     }
 }

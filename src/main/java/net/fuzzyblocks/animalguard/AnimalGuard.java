@@ -3,7 +3,6 @@ package net.fuzzyblocks.animalguard;
 import com.pneumaticraft.commandhandler.CommandHandler;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.fuzzyblocks.animalguard.commands.*;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -22,7 +21,6 @@ import net.fuzzyblocks.animalguard.util.Updater;
 public class AnimalGuard extends JavaPlugin {
 
     private CommandHandler commandHandler;
-
     public final DamageListener dl = new DamageListener(this);
     public final ShearListener shear = new ShearListener(this);
 
@@ -38,9 +36,6 @@ public class AnimalGuard extends JavaPlugin {
         // Config Setup
         setupConfig();
 
-        // Check config for any errors.
-        validateConfig();
-
         // Enable plugin metrics
         try {
             MetricsLite metrics = new MetricsLite(this);
@@ -50,12 +45,8 @@ public class AnimalGuard extends JavaPlugin {
             getLogger().warning(e.getLocalizedMessage());
         }
 
-        //Check for updates to plugin
-        Updater updater;
-        if (this.getConfig().getBoolean("auto-download-updates"))
-            updater = new Updater(this, "animalguard", this.getFile(), Updater.UpdateType.DEFAULT, false);
-        else
-            updater = new Updater(this, "animalguard", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
+        // Check for updates to plugin
+        updatePlugin();
     }
 
     //WorldGuard Check
@@ -84,19 +75,9 @@ public class AnimalGuard extends JavaPlugin {
         saveConfig();
     }
 
-    public void validateConfig() {
-        reloadConfig();
-        if (this.getConfig().getInt("notify-interval") > 20) {
-            this.getLogger().warning("Notify interval greater then 20");
-            this.getConfig().set("notify-interval", 20);
-            this.getLogger().info("Notify interval has been set to 20");
-            this.saveConfig();
-        }
-    }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        List<String> allArgs = new ArrayList<String>();
+        List<String> allArgs = new ArrayList<>();
         allArgs.addAll(Arrays.asList(args));
         allArgs.add(0, label);
         return commandHandler.locateAndRunCommand(sender, allArgs);
@@ -115,5 +96,16 @@ public class AnimalGuard extends JavaPlugin {
         PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvents(dl, this);
         pm.registerEvents(shear, this);
+    }
+
+    private void updatePlugin() {
+        Updater updater;
+        if (this.getConfig().getBoolean("auto-download-updates"))
+            updater = new Updater(this, "animalguard", this.getFile(), Updater.UpdateType.DEFAULT, false);
+        else {
+            updater = new Updater(this, "animalguard", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
+            if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE)
+                this.getLogger().info("There is an update availible on BukkitDev");
+        }
     }
 }
