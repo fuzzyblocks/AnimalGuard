@@ -1,6 +1,8 @@
 package net.fuzzyblocks.animalguard;
 
+import com.pneumaticraft.commandhandler.CommandHandler;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import net.fuzzyblocks.animalguard.commands.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -12,32 +14,41 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.MetricsLite;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import net.fuzzyblocks.animalguard.util.Updater;
 
 public class AnimalGuard extends JavaPlugin {
 
-    String success = ChatColor.GREEN + "[AnimalGuard]: ";
-    String fail = ChatColor.RED + "[AnimalGuard]: ";
+    private CommandHandler commandHandler;
+
     public final DamageListener dl = new DamageListener(this);
     public final ShearListener shear = new ShearListener(this);
 
     //Enable stuff
     @Override
     public void onEnable() {
-        //event registration
-        PluginManager pm = this.getServer().getPluginManager();
-        pm.registerEvents(dl, this);
-        pm.registerEvents(shear, this);
+        registerCommands();
+        registerEvents();
 
-        //Check for WorldGuard
+        // Check for WorldGuard
         getWorldGuardPlugin();
-        //CFG Setup
+
+        // Config Setup
         setupConfig();
 
-        //Check config for any errors.
+        // Check config for any errors.
         validateConfig();
-        collectStats();
+
+        // Enable plugin metrics
+        try {
+            MetricsLite metrics = new MetricsLite(this);
+            metrics.enable();
+        } catch (IOException e) {
+            getLogger().info("An error occurred while posting results to the Metrics.");
+            getLogger().warning(e.getLocalizedMessage());
+        }
 
         //Check for updates to plugin
         Updater updater;
@@ -45,16 +56,6 @@ public class AnimalGuard extends JavaPlugin {
             updater = new Updater(this, "animalguard", this.getFile(), Updater.UpdateType.DEFAULT, false);
         else
             updater = new Updater(this, "animalguard", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
-    }
-
-    public void collectStats() {
-        try {
-            MetricsLite metrics = new MetricsLite(this);
-            metrics.start();
-        } catch (IOException e) {
-            this.getLogger().warning("Could not submit stats");
-        }
-
     }
 
     //WorldGuard Check
@@ -83,7 +84,8 @@ public class AnimalGuard extends JavaPlugin {
         saveConfig();
     }
 
-    private void validateConfig() {
+    public void validateConfig() {
+        reloadConfig();
         if (this.getConfig().getInt("notify-interval") > 20) {
             this.getLogger().warning("Notify interval greater then 20");
             this.getConfig().set("notify-interval", 20);
@@ -93,41 +95,25 @@ public class AnimalGuard extends JavaPlugin {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (commandLabel.equalsIgnoreCase("animalguard")) {
-            if (args.length < 1) {
-                sender.sendMessage(ChatColor.YELLOW + "+++++++++AnimalGuard++++++++++");
-                sender.sendMessage(ChatColor.GREEN + "+ A Animal Friendly Plugin!");
-                sender.sendMessage(ChatColor.RED + "+ Version: " + getDescription().getVersion());
-                sender.sendMessage(ChatColor.LIGHT_PURPLE + "+ Developer: " + getDescription().getAuthors());
-                sender.sendMessage(ChatColor.AQUA + "http://www.dev.bukkit.org/server-mods/animalguard");
-                sender.sendMessage(ChatColor.YELLOW + "+++++++++++++++++++++++++++++");
-                return true;
-            }
-            if (args[0].equalsIgnoreCase("-reload") && sender.isOp() || sender.hasPermission("animalguard.admin")) {
-                //reload config stuff.
-                this.reloadConfig();
-                //Set string on reload of config.
-                this.validateConfig();
-                sender.sendMessage(success + "Configuration Reloaded!");
-                return true;
-            }
-            if (args[0].equalsIgnoreCase("-list") && args[1].equalsIgnoreCase("player") && sender.isOp() || sender.hasPermission("animalguard.list")) {
-                List<String> pfp = getConfig().getStringList("protect-from-player");
-                sender.sendMessage(success + "The following are protected from players");
-                for (String i : pfp)
-                    sender.sendMessage(i);
-            }
-            if (args[0].equalsIgnoreCase("-list") && args[1].equalsIgnoreCase("mobs") && sender.isOp() || sender.hasPermission("animalguard.list")) {
-                List<String> pfp = getConfig().getStringList("protect-from-monsters");
-                sender.sendMessage(success + "The following are protected from mobs");
-                for (String i : pfp)
-                    sender.sendMessage(i);
-            } else {
-                sender.sendMessage(fail + "You lack the necessary permissions to perform this action.");
-                return true;
-            }
-        }
-        return false;
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        List<String> allArgs = new ArrayList<String>();
+        allArgs.addAll(Arrays.asList(args));
+        allArgs.add(0, label);
+        return commandHandler.locateAndRunCommand(sender, allArgs);
+    }
+
+    private void registerCommands() {
+        PermissionsModule pm = new PermissionsModule();
+        commandHandler = new CommandHandler(this, pm);
+
+        commandHandler.registerCommand(new BaseCommand(this));
+        commandHandler.registerCommand(new VersionCommand(this));
+        commandHandler.registerCommand(new ReloadCommand(this));
+    }
+
+    private void registerEvents() {
+        PluginManager pm = this.getServer().getPluginManager();
+        pm.registerEvents(dl, this);
+        pm.registerEvents(shear, this);
     }
 }
