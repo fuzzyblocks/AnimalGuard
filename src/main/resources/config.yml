@@ -5,14 +5,14 @@ notify-outdated: false
 auto-download-updates: false
 debug: false
 protect-from-player:
-     - CHICKEN
-     - COW
-     - MUSHROOM_COW
-     - OCELOT
-     - PIG
-     - SHEEP
-     - WOLF
-     - IRON_GOLOM
-     - SNOWMAN
+     - Chicken
+     - Cow
+     - MushroomCow
+     - Ozelot
+     - Pig
+     - Sheep
+     - Wolf
+     - VillagerGolem
+     - SnowMan
 protect-from-monsters:
-     - VILLAGER
+     - Villager
