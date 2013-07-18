@@ -2,10 +2,10 @@ package net.fuzzyblocks.animalguard;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -50,13 +50,13 @@ public class DamageListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onAttackArrow(EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Arrow) {
-            if (((Arrow) e.getDamager()).getShooter() instanceof Player) {
+    public void onAttackByProjectile(EntityDamageByEntityEvent e) {
+        if (e.getDamager() instanceof Projectile) {
+            if (((Projectile) e.getDamager()).getShooter() instanceof Player) {
                 EntityType entity = e.getEntity().getType();
 
                 if (protectedFromPlayer.contains(entity)) {
-                    Player player = (Player) ((Arrow) e.getDamager()).getShooter();
+                    Player player = (Player) ((Projectile) e.getDamager()).getShooter();
                     Location loc = e.getEntity().getLocation();
                     if (plugin.getWorldGuardPlugin().canBuild(player, loc)) {
                         e.setCancelled(false);
