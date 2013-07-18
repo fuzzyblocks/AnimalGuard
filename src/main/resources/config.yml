@@ -1,7 +1,5 @@
 #Default AnimalGuard Config Version 1.0
-notify: true
-notify-interval: 10
-notify-outdated: false
+notify-outdated: true
 auto-download-updates: false
 debug: false
 protect-from-player:

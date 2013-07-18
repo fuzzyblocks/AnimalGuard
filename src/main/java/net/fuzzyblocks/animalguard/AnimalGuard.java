@@ -102,7 +102,7 @@ public class AnimalGuard extends JavaPlugin {
         Updater updater;
         if (this.getConfig().getBoolean("auto-download-updates"))
             updater = new Updater(this, "animalguard", this.getFile(), Updater.UpdateType.DEFAULT, false);
-        else {
+        else if (this.getConfig().getBoolean("notify-outdated")) {
             updater = new Updater(this, "animalguard", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
             if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE)
                 this.getLogger().info("There is an update availible on BukkitDev");
