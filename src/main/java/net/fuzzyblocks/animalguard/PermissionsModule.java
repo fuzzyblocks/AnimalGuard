@@ -36,7 +36,7 @@ import java.util.List;
 public class PermissionsModule implements PermissionsInterface {
     @Override
     public boolean hasPermission(CommandSender sender, String node, boolean isOpRequired) {
-        return sender instanceof ConsoleCommandSender || sender  instanceof RemoteConsoleCommandSender || sender.hasPermission(node);
+        return sender instanceof ConsoleCommandSender || sender instanceof RemoteConsoleCommandSender || sender.hasPermission(node);
     }
 
     @Override

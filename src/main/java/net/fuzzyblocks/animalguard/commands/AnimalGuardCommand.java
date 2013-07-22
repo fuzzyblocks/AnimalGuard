@@ -8,10 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-/**
- *
- * @author cedeel
- */
+/** @author cedeel */
 public abstract class AnimalGuardCommand extends Command {
 
     protected AnimalGuard plugin;
@@ -43,7 +40,7 @@ public abstract class AnimalGuardCommand extends Command {
         for (String key : this.getKeyStrings())
             keys += prefix + key + ", ";
 
-        keys = keys.substring(0, keys.length() -2);
+        keys = keys.substring(0, keys.length() - 2);
         sender.sendMessage(colour2 + "Aliases: " + colour1 + keys);
         if (this.getCommandExamples().size() > 0) {
             sender.sendMessage(colour2 + "Examples: ");

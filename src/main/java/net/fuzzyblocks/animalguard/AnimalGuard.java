@@ -1,10 +1,13 @@
 package net.fuzzyblocks.animalguard;
 
-import net.fuzzyblocks.animalguard.listeners.ShearListener;
-import net.fuzzyblocks.animalguard.listeners.DamageListener;
 import com.pneumaticraft.commandhandler.CommandHandler;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import net.fuzzyblocks.animalguard.commands.*;
+import net.fuzzyblocks.animalguard.commands.BaseCommand;
+import net.fuzzyblocks.animalguard.commands.ReloadCommand;
+import net.fuzzyblocks.animalguard.commands.VersionCommand;
+import net.fuzzyblocks.animalguard.listeners.DamageListener;
+import net.fuzzyblocks.animalguard.listeners.ShearListener;
+import net.fuzzyblocks.animalguard.util.Updater;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -18,7 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import net.fuzzyblocks.animalguard.util.Updater;
 
 public class AnimalGuard extends JavaPlugin {
 

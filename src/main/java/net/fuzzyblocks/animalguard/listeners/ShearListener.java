@@ -24,9 +24,9 @@ public class ShearListener implements Listener {
         if (event.getEntity() instanceof Sheep) {
             Player player = event.getPlayer();
             Location loc = event.getEntity().getLocation();
-                if (!this.plugin.getWorldGuardPlugin().canBuild(player, loc))
-                    event.setCancelled(true);
-                    player.sendMessage(cannotShearSheep);
+            if (!this.plugin.getWorldGuardPlugin().canBuild(player, loc))
+                event.setCancelled(true);
+            player.sendMessage(cannotShearSheep);
         }
     }
 }
