@@ -1,5 +1,6 @@
 package net.fuzzyblocks.animalguard.listeners;
 
+import net.fuzzyblocks.animalguard.AnimalGuard;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -13,12 +14,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.fuzzyblocks.animalguard.AnimalGuard;
 
 public class DamageListener implements Listener {
 
-    String cannotKillMobs = ChatColor.DARK_RED + "You cannot attack mobs here!";
     public static AnimalGuard plugin;
+    String cannotKillMobs = ChatColor.DARK_RED + "You cannot attack mobs here!";
     private List<EntityType> protectedFromPlayer = new ArrayList<>();
     private List<EntityType> protectedFromMonster = new ArrayList<>();
 
@@ -40,9 +40,7 @@ public class DamageListener implements Listener {
             Player player = (Player) e.getDamager();
             Location loc = e.getEntity().getLocation();
             if (protectedFromPlayer.contains(entity))
-                if (plugin.getWorldGuardPlugin().canBuild(player, loc)) {
-                    e.setCancelled(false);
-                } else {
+                if (!plugin.getWorldGuardPlugin().canBuild(player, loc)) {
                     e.setCancelled(true);
                     player.sendMessage(cannotKillMobs);
                 }
@@ -59,10 +57,9 @@ public class DamageListener implements Listener {
                 if (protectedFromPlayer.contains(entity)) {
                     Player player = (Player) ((Projectile) e.getDamager()).getShooter();
                     Location loc = e.getEntity().getLocation();
-                    if (plugin.getWorldGuardPlugin().canBuild(player, loc)) {
-                        e.setCancelled(false);
-                    } else {
+                    if (!plugin.getWorldGuardPlugin().canBuild(player, loc)) {
                         e.setCancelled(true);
+                        e.getDamager().remove();
                         player.sendMessage(cannotKillMobs);
                     }
                 }

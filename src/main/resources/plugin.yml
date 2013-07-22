@@ -1,7 +1,7 @@
 name: AnimalGuard
 version: maven-version-number
 authors: [cedeel,Lanky_Lord]
-main: net.fuzzyblocks.AnimalGuard.AnimalGuard
+main: net.fuzzyblocks.animalguard.AnimalGuard
 depends: WorldGuard
 commands:
    animalguard:

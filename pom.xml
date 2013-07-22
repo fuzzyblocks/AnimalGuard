@@ -92,12 +92,17 @@
                     <artifactSet>
                         <includes>
                             <include>org.mcstats.bukkit:metrics-lite</include>
+                            <include>com.pneumaticraft.commandhandler:CommandHandler</include>
                         </includes>
                     </artifactSet>
                     <relocations>
                         <relocation>
                             <pattern>org.mcstats</pattern>
                             <shadedPattern>net.fuzzyblocks.animalguard.util.mcstats</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.pneumaticraft.commandhandler</pattern>
+                            <shadedPattern>net.fuzzyblocks.animalguard.util.commandhandler</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

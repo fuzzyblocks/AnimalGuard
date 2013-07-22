@@ -23,8 +23,6 @@ import net.fuzzyblocks.animalguard.util.Updater;
 public class AnimalGuard extends JavaPlugin {
 
     private CommandHandler commandHandler;
-    public final DamageListener dl = new DamageListener(this);
-    public final ShearListener shear = new ShearListener(this);
 
     //Enable stuff
     @Override
@@ -96,8 +94,8 @@ public class AnimalGuard extends JavaPlugin {
 
     private void registerEvents() {
         PluginManager pm = this.getServer().getPluginManager();
-        pm.registerEvents(dl, this);
-        pm.registerEvents(shear, this);
+        pm.registerEvents(new DamageListener(this), this);
+        pm.registerEvents(new ShearListener(this), this);
     }
 
     private void updatePlugin() {

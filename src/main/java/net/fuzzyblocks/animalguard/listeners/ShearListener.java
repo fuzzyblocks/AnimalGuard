@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerShearEntityEvent;
 public class ShearListener implements Listener {
 
     private AnimalGuard plugin;
+    String cannotShearSheep = ChatColor.DARK_RED + "You cannot shear sheep here!";
 
     public ShearListener(AnimalGuard instance) {
         this.plugin = instance;
@@ -21,15 +22,11 @@ public class ShearListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSheepShear(PlayerShearEntityEvent event) {
         if (event.getEntity() instanceof Sheep) {
-            if (event.isCancelled())
-                return;
             Player player = event.getPlayer();
             Location loc = event.getEntity().getLocation();
-
-            if (plugin.getConfig().getBoolean("shear-protect"))
                 if (!this.plugin.getWorldGuardPlugin().canBuild(player, loc))
                     event.setCancelled(true);
-                    player.sendMessage(ChatColor.RED + "You cannot shear sheep here!");
+                    player.sendMessage(cannotShearSheep);
         }
     }
 }
