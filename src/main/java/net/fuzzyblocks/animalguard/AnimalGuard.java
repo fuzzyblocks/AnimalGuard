@@ -95,7 +95,8 @@ public class AnimalGuard extends JavaPlugin {
     private void registerEvents() {
         PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvents(new DamageListener(this), this);
-        pm.registerEvents(new ShearListener(this), this);
+        if (this.getConfig().getBoolean("allow-sheep-shearing"))
+            pm.registerEvents(new ShearListener(this), this);
     }
 
     private void updatePlugin() {

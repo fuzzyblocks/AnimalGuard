@@ -2,6 +2,7 @@
 notify-outdated: true
 auto-download-updates: false
 debug: false
+allow-sheep-shearing: false
 protect-from-player:
      - Chicken
      - Cow
