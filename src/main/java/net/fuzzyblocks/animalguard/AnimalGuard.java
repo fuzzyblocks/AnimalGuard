@@ -1,5 +1,7 @@
 package net.fuzzyblocks.animalguard;
 
+import net.fuzzyblocks.animalguard.listeners.ShearListener;
+import net.fuzzyblocks.animalguard.listeners.DamageListener;
 import com.pneumaticraft.commandhandler.CommandHandler;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.fuzzyblocks.animalguard.commands.*;

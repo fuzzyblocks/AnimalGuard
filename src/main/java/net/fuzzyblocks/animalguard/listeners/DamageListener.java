@@ -1,4 +1,4 @@
-package net.fuzzyblocks.animalguard;
+package net.fuzzyblocks.animalguard.listeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.fuzzyblocks.animalguard.AnimalGuard;
 
 public class DamageListener implements Listener {
 

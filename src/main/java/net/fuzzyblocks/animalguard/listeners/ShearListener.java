@@ -1,5 +1,6 @@
-package net.fuzzyblocks.animalguard;
+package net.fuzzyblocks.animalguard.listeners;
 
+import net.fuzzyblocks.animalguard.AnimalGuard;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
