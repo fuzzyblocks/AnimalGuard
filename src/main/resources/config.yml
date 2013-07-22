@@ -12,5 +12,6 @@ protect-from-player:
      - Wolf
      - VillagerGolem
      - SnowMan
+     - EntityHorse
 protect-from-monsters:
      - Villager
