@@ -2,6 +2,7 @@ package net.fuzzyblocks.animalguard.listeners;
 
 import net.fuzzyblocks.animalguard.AnimalGuard;
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -42,11 +43,13 @@ public class InteractListener implements Listener {
         ItemStack item = event.getPlayer().getItemInHand();
         if (en instanceof Sheep && item.getTypeId() == 351 && !plugin.getWorldGuardPlugin().canBuild(player, loc)) {
             event.setCancelled(true);
+            DyeColor dyeColor = ((Sheep) en).getColor();
+            ((Sheep) en).setColor(DyeColor.WHITE);
+            ((Sheep) en).setColor(dyeColor);
             player.sendMessage(cannotDyeSheep);
+        }
         if (item.getTypeId() == 420 && !plugin.getWorldGuardPlugin().canBuild(player, loc)) {
-                event.setCancelled(true);
-            }
+            event.setCancelled(true);
         }
     }
-
 }
