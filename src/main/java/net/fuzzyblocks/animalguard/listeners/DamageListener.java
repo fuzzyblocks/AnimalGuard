@@ -1,19 +1,13 @@
 package net.fuzzyblocks.animalguard.listeners;
 
+import com.sk89q.worldguard.bukkit.WGBukkit;
 import net.fuzzyblocks.animalguard.AnimalGuard;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DamageListener implements Listener {
 
@@ -34,32 +28,29 @@ public class DamageListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onAttacked(EntityDamageByEntityEvent e) {
         if (e.getDamager() instanceof Player) {
-            EntityType entity = e.getEntityType();
+            Entity entity = e.getEntity();
             Player player = (Player) e.getDamager();
-            Location loc = e.getEntity().getLocation();
-            if (plugin.protectedFromPlayer.contains(entity))
-                if (!plugin.getWorldGuardPlugin().canBuild(player, loc)) {
-                    e.setCancelled(true);
-                    player.sendMessage(cannotKillMobs);
-                }
+            if (plugin.protectedFromPlayer.contains(entity.getType())
+                    && !WGBukkit.getPlugin().canBuild(player, entity.getLocation())) {
+                e.setCancelled(true);
+                player.sendMessage(cannotKillMobs);
+            }
         }
-
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onAttackByProjectile(EntityDamageByEntityEvent e) {
         if (e.getDamager() instanceof Projectile) {
-            if (((Projectile) e.getDamager()).getShooter() instanceof Player) {
-                EntityType entity = e.getEntity().getType();
+            Projectile projectile = (Projectile) e.getDamager();
+            if (projectile.getShooter() instanceof Player) {
+                Player player = (Player) projectile.getShooter();
+                Entity entity = e.getEntity();
 
-                if (plugin.protectedFromPlayer.contains(entity)) {
-                    Player player = (Player) ((Projectile) e.getDamager()).getShooter();
-                    Location loc = e.getEntity().getLocation();
-                    if (!plugin.getWorldGuardPlugin().canBuild(player, loc)) {
-                        e.setCancelled(true);
-                        e.getDamager().remove();
-                        player.sendMessage(cannotKillMobs);
-                    }
+                if (plugin.protectedFromPlayer.contains(entity.getType())
+                        && !WGBukkit.getPlugin().canBuild(player, entity.getLocation())) {
+                    e.setCancelled(true);
+                    projectile.remove();
+                    player.sendMessage(cannotKillMobs);
                 }
             }
         }
@@ -68,7 +59,7 @@ public class DamageListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onMonsterDamage(EntityDamageByEntityEvent e) {
         if (e.getDamager() instanceof Monster)
-            if (plugin.protectedFromMonster.contains(e.getEntityType().toString()))
+            if (plugin.protectedFromMonster.contains(e.getEntityType()))
                 e.setCancelled(true);
     }
 }

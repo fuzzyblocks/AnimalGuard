@@ -1,9 +1,9 @@
 package net.fuzzyblocks.animalguard.listeners;
 
+import com.sk89q.worldguard.bukkit.WGBukkit;
 import net.fuzzyblocks.animalguard.AnimalGuard;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -27,8 +27,7 @@ public class InteractListener implements Listener {
     public void onSheepShear(PlayerShearEntityEvent e) {
         if (e.getEntity() instanceof Sheep) {
             Player player = e.getPlayer();
-            Location loc = e.getEntity().getLocation();
-            if (!this.plugin.getWorldGuardPlugin().canBuild(player, loc))
+            if (!WGBukkit.getPlugin().canBuild(player, e.getEntity().getLocation()))
                 e.setCancelled(true);
             player.sendMessage(ChatColor.DARK_RED + "You cannot shear sheep here!");
         }
@@ -41,7 +40,7 @@ public class InteractListener implements Listener {
             Player player = e.getPlayer();
             ItemStack item = player.getItemInHand();
             if (item.getType() == Material.INK_SACK
-                    && !plugin.getWorldGuardPlugin().canBuild(player, sheep.getLocation())) {
+                    && !WGBukkit.getPlugin().canBuild(player, sheep.getLocation())) {
 
                 // Cancel dye
                 e.setCancelled(true);
@@ -71,7 +70,7 @@ public class InteractListener implements Listener {
         Entity entity = e.getRightClicked();
         ItemStack item = player.getItemInHand();
         if ((item.getType() == Material.LEASH)
-                && !plugin.getWorldGuardPlugin().canBuild(player, entity.getLocation())
+                && !WGBukkit.getPlugin().canBuild(player, entity.getLocation())
                 && plugin.protectedFromPlayer.contains(entity.getType())) {
             e.setCancelled(true);
             player.sendMessage(ChatColor.DARK_RED + "You cannot leash mobs here!");

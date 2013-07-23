@@ -54,7 +54,7 @@ public class Updater {
     private URL url; // Connecting to RSS
     private File file; // The plugin's file
     private Thread thread; // Updater thread
-    private static final String DBOUrl = "http://dev.bukkit.org/server-mods/"; // Slugs will be appended to this to get to the project's RSS feed
+    private static final String DBOUrl = "http://dev.bukkit.org/bukkit-plugins/"; // Slugs will be appended to this to get to the project's RSS feed
     private String[] noUpdateTag = {"-DEV", "-PRE", "-SNAPSHOT"}; // If the version number contains one of these, don't update.
     private static final int BYTE_SIZE = 1024; // Used for downloading files
     private String updateFolder = YamlConfiguration.loadConfiguration(new File("bukkit.yml")).getString("settings.update-folder"); // The folder that downloads will be placed in
@@ -152,6 +152,7 @@ public class Updater {
             try {
                 thread.join();
             } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
             }
     }
 
@@ -200,7 +201,8 @@ public class Updater {
                     in.close();
                 if (fout != null)
                     fout.close();
-            } catch (Exception ex) {
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -276,9 +278,14 @@ public class Updater {
      * of a zip.
      */
     public boolean pluginFile(String name) {
-        for (File file : new File("plugins").listFiles())
-            if (file.getName().equals(name))
-                return true;
+        try {
+            for (File file : new File("plugins").listFiles())
+                if (file.getName().equals(name))
+                    return true;
+            return false;
+        } catch (NullPointerException e) {
+            System.out.println(e.getMessage());
+        }
         return false;
     }
 

@@ -1,7 +1,6 @@
 package net.fuzzyblocks.animalguard;
 
 import com.pneumaticraft.commandhandler.CommandHandler;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.fuzzyblocks.animalguard.commands.BaseCommand;
 import net.fuzzyblocks.animalguard.commands.ReloadCommand;
 import net.fuzzyblocks.animalguard.commands.VersionCommand;
@@ -13,7 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.FileConfigurationOptions;
 import org.bukkit.entity.EntityType;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.MetricsLite;
@@ -35,9 +33,6 @@ public class AnimalGuard extends JavaPlugin {
         registerCommands();
         registerEvents();
 
-        // Check for WorldGuard
-        getWorldGuardPlugin();
-
         // Config Setup
         setupConfig();
 
@@ -52,21 +47,6 @@ public class AnimalGuard extends JavaPlugin {
 
         // Check for updates to plugin
         updatePlugin();
-    }
-
-    //WorldGuard Check
-    public WorldGuardPlugin getWorldGuardPlugin() {
-        Plugin plugin = this.getServer().getPluginManager().getPlugin("WorldGuard");
-        PluginManager pm = this.getServer().getPluginManager();
-        if (plugin == null || !(plugin instanceof WorldGuardPlugin)) {
-            //warn WG was not found.
-            this.getLogger().warning("WorldGuard plugin not found");
-            this.getLogger().warning("AnimalGuard Disabled!");
-            //Disable the plugin.
-            pm.disablePlugin(this);
-            return null;
-        }
-        return (WorldGuardPlugin) plugin;
     }
 
     //Configuration setup
