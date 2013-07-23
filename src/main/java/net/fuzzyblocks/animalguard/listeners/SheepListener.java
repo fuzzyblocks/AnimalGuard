@@ -3,19 +3,23 @@ package net.fuzzyblocks.animalguard.listeners;
 import net.fuzzyblocks.animalguard.AnimalGuard;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
+import org.bukkit.inventory.ItemStack;
 
-public class ShearListener implements Listener {
+public class SheepListener implements Listener {
 
-    private AnimalGuard plugin;
     String cannotShearSheep = ChatColor.DARK_RED + "You cannot shear sheep here!";
+    String cannotDyeSheep = ChatColor.DARK_RED + "You cannot dye sheep here!";
+    private AnimalGuard plugin;
 
-    public ShearListener(AnimalGuard instance) {
+    public SheepListener(AnimalGuard instance) {
         this.plugin = instance;
     }
 
@@ -29,4 +33,17 @@ public class ShearListener implements Listener {
             player.sendMessage(cannotShearSheep);
         }
     }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onSheepDye(PlayerInteractEntityEvent event) {
+        Player player = event.getPlayer();
+        Entity en = event.getRightClicked();
+        Location loc = en.getLocation();
+        ItemStack item = event.getPlayer().getItemInHand();
+        if (en instanceof Sheep && item.getTypeId() == 351 && !plugin.getWorldGuardPlugin().canBuild(player, loc)) {
+            event.setCancelled(true);
+            player.sendMessage(cannotDyeSheep);
+        }
+    }
+
 }

@@ -6,7 +6,7 @@ import net.fuzzyblocks.animalguard.commands.BaseCommand;
 import net.fuzzyblocks.animalguard.commands.ReloadCommand;
 import net.fuzzyblocks.animalguard.commands.VersionCommand;
 import net.fuzzyblocks.animalguard.listeners.DamageListener;
-import net.fuzzyblocks.animalguard.listeners.ShearListener;
+import net.fuzzyblocks.animalguard.listeners.SheepListener;
 import net.fuzzyblocks.animalguard.util.Updater;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -97,8 +97,8 @@ public class AnimalGuard extends JavaPlugin {
     private void registerEvents() {
         PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvents(new DamageListener(this), this);
-        if (this.getConfig().getBoolean("allow-sheep-shearing"))
-            pm.registerEvents(new ShearListener(this), this);
+        if (!this.getConfig().getBoolean("allow-sheep-shearing"))
+            pm.registerEvents(new SheepListener(this), this);
     }
 
     private void updatePlugin() {
