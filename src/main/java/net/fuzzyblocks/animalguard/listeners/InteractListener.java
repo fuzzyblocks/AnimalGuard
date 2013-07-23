@@ -56,6 +56,8 @@ public class InteractListener implements Listener {
                 if (playerDye != dyeColor) {
                     ItemStack dye = new ItemStack(Material.INK_SACK, playerDye.getDyeData());
                     player.getInventory().addItem(dye);
+                    //noinspection deprecation
+                    player.updateInventory();
                 }
 
                 player.sendMessage(ChatColor.DARK_RED + "You cannot dye sheep here!");
