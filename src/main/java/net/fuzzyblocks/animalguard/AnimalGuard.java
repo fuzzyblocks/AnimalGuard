@@ -12,6 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.FileConfigurationOptions;
+import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +26,8 @@ import java.util.List;
 public class AnimalGuard extends JavaPlugin {
 
     private CommandHandler commandHandler;
+    public List<EntityType> protectedFromPlayer = new ArrayList<>();
+    public List<EntityType> protectedFromMonster = new ArrayList<>();
 
     //Enable stuff
     @Override

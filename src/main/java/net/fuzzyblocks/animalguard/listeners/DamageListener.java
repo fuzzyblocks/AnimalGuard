@@ -19,17 +19,15 @@ public class DamageListener implements Listener {
 
     public static AnimalGuard plugin;
     String cannotKillMobs = ChatColor.DARK_RED + "You cannot attack mobs here!";
-    private List<EntityType> protectedFromPlayer = new ArrayList<>();
-    private List<EntityType> protectedFromMonster = new ArrayList<>();
 
     public DamageListener(AnimalGuard instance) {
         plugin = instance;
         for (String entity : plugin.getConfig().getStringList("protect-from-player")) {
-            protectedFromPlayer.add(EntityType.fromName(entity));
+            plugin.protectedFromPlayer.add(EntityType.fromName(entity));
         }
 
         for (String entity : plugin.getConfig().getStringList("protect-from-monsters"))
-            protectedFromMonster.add(EntityType.fromName(entity));
+            plugin.protectedFromMonster.add(EntityType.fromName(entity));
 
     }
 
@@ -39,7 +37,7 @@ public class DamageListener implements Listener {
             EntityType entity = e.getEntityType();
             Player player = (Player) e.getDamager();
             Location loc = e.getEntity().getLocation();
-            if (protectedFromPlayer.contains(entity))
+            if (plugin.protectedFromPlayer.contains(entity))
                 if (!plugin.getWorldGuardPlugin().canBuild(player, loc)) {
                     e.setCancelled(true);
                     player.sendMessage(cannotKillMobs);
@@ -54,7 +52,7 @@ public class DamageListener implements Listener {
             if (((Projectile) e.getDamager()).getShooter() instanceof Player) {
                 EntityType entity = e.getEntity().getType();
 
-                if (protectedFromPlayer.contains(entity)) {
+                if (plugin.protectedFromPlayer.contains(entity)) {
                     Player player = (Player) ((Projectile) e.getDamager()).getShooter();
                     Location loc = e.getEntity().getLocation();
                     if (!plugin.getWorldGuardPlugin().canBuild(player, loc)) {
@@ -70,7 +68,7 @@ public class DamageListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onMonsterDamage(EntityDamageByEntityEvent e) {
         if (e.getDamager() instanceof Monster)
-            if (protectedFromMonster.contains(e.getEntityType().toString()))
+            if (plugin.protectedFromMonster.contains(e.getEntityType().toString()))
                 e.setCancelled(true);
     }
 }
