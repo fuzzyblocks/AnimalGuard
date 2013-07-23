@@ -4,6 +4,7 @@ import net.fuzzyblocks.animalguard.AnimalGuard;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
@@ -35,19 +36,30 @@ public class InteractListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onSheepDye(PlayerInteractEntityEvent e) {
-        Player player = e.getPlayer();
-        Entity entity = e.getRightClicked();
-        Location loc = entity.getLocation();
-        ItemStack item = player.getItemInHand();
-        if (entity instanceof Sheep && item.getTypeId() == 351
-                && !plugin.getWorldGuardPlugin().canBuild(player, loc)) {
-            e.setCancelled(true);
-            DyeColor dyeColor = ((Sheep) entity).getColor();
-            if (dyeColor == DyeColor.WHITE)
-                ((Sheep) entity).setColor(DyeColor.SILVER);
-            ((Sheep) entity).setColor(DyeColor.WHITE);
-            ((Sheep) entity).setColor(dyeColor);
-            player.sendMessage(ChatColor.DARK_RED + "You cannot dye sheep here!");
+        if (e.getRightClicked() instanceof Sheep) {
+            Sheep sheep = (Sheep)e.getRightClicked();
+            Player player = e.getPlayer();
+            ItemStack item = player.getItemInHand();
+            if (item.getType() == Material.INK_SACK
+                    && !plugin.getWorldGuardPlugin().canBuild(player, sheep.getLocation())) {
+
+                // Cancel dye
+                e.setCancelled(true);
+                DyeColor dyeColor = sheep.getColor();
+                if (dyeColor == DyeColor.WHITE)
+                    sheep.setColor(DyeColor.SILVER);
+                sheep.setColor(DyeColor.WHITE);
+                sheep.setColor(dyeColor);
+
+                // Give player back his dye if different from the colour of the sheep
+                DyeColor playerDye = DyeColor.getByDyeData(item.getData().getData());
+                if (playerDye != dyeColor) {
+                    ItemStack dye = new ItemStack(Material.INK_SACK, playerDye.getDyeData());
+                    player.getInventory().addItem(dye);
+                }
+
+                player.sendMessage(ChatColor.DARK_RED + "You cannot dye sheep here!");
+            }
         }
     }
 
@@ -55,9 +67,10 @@ public class InteractListener implements Listener {
     public void onMobLeash(PlayerInteractEntityEvent e) {
         Player player = e.getPlayer();
         Entity entity = e.getRightClicked();
-        Location loc = entity.getLocation();
         ItemStack item = player.getItemInHand();
-        if ((item.getTypeId() == 420) && !plugin.getWorldGuardPlugin().canBuild(player, loc) && plugin.protectedFromPlayer.contains(entity.getType())) {
+        if ((item.getType() == Material.LEASH)
+                && !plugin.getWorldGuardPlugin().canBuild(player, entity.getLocation())
+                && plugin.protectedFromPlayer.contains(entity.getType())) {
             e.setCancelled(true);
             player.sendMessage(ChatColor.DARK_RED + "You cannot leash mobs here!");
         }
