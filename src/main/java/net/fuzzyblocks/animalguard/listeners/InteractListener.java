@@ -13,13 +13,13 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class SheepListener implements Listener {
+public class InteractListener implements Listener {
 
     String cannotShearSheep = ChatColor.DARK_RED + "You cannot shear sheep here!";
     String cannotDyeSheep = ChatColor.DARK_RED + "You cannot dye sheep here!";
     private AnimalGuard plugin;
 
-    public SheepListener(AnimalGuard instance) {
+    public InteractListener(AnimalGuard instance) {
         this.plugin = instance;
     }
 
@@ -43,6 +43,9 @@ public class SheepListener implements Listener {
         if (en instanceof Sheep && item.getTypeId() == 351 && !plugin.getWorldGuardPlugin().canBuild(player, loc)) {
             event.setCancelled(true);
             player.sendMessage(cannotDyeSheep);
+        if (item.getTypeId() == 420 && !plugin.getWorldGuardPlugin().canBuild(player, loc)) {
+                event.setCancelled(true);
+            }
         }
     }
 
