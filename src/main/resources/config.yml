@@ -3,6 +3,9 @@ notify-outdated: true
 auto-download-updates: false
 debug: false
 allow-sheep-shearing: false
+allow-sheep-dye: false
+allow-mob-leashing: false
+allow-cow-milking: true
 protect-from-player:
      - Chicken
      - Cow
