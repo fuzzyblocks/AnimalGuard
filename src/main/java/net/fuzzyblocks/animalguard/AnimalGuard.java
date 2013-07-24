@@ -24,8 +24,8 @@ import java.util.List;
 public class AnimalGuard extends JavaPlugin {
 
     private CommandHandler commandHandler;
-    public List<EntityType> protectedFromPlayer = new ArrayList<>();
-    public List<EntityType> protectedFromMonster = new ArrayList<>();
+    private static List<EntityType> protectedFromPlayer = new ArrayList<>();
+    private static List<EntityType> protectedFromMonster = new ArrayList<>();
 
     //Enable stuff
     @Override
@@ -35,6 +35,14 @@ public class AnimalGuard extends JavaPlugin {
 
         // Config Setup
         setupConfig();
+
+        // Fill the lists
+        for (String entity : this.getConfig().getStringList("protect-from-player")) {
+            protectedFromPlayer.add(EntityType.fromName(entity));
+        }
+
+        for (String entity : this.getConfig().getStringList("protect-from-monsters"))
+            protectedFromMonster.add(EntityType.fromName(entity));
 
         // Enable plugin metrics
         try {
@@ -47,6 +55,14 @@ public class AnimalGuard extends JavaPlugin {
 
         // Check for updates to plugin
         updatePlugin();
+    }
+
+    public static boolean isProtectedFromPlayer(EntityType type) {
+        return protectedFromPlayer.contains(type);
+    }
+
+    public static boolean isProtectedFromMonster(EntityType type) {
+        return protectedFromMonster.contains(type);
     }
 
     //Configuration setup
@@ -81,7 +97,7 @@ public class AnimalGuard extends JavaPlugin {
         PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvents(new DamageListener(this), this);
         if (!this.getConfig().getBoolean("allow-sheep-shearing"))
-            pm.registerEvents(new InteractListener(this), this);
+            pm.registerEvents(new InteractListener(), this);
     }
 
     private void updatePlugin() {

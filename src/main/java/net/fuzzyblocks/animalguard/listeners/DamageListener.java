@@ -16,12 +16,7 @@ public class DamageListener implements Listener {
 
     public DamageListener(AnimalGuard instance) {
         plugin = instance;
-        for (String entity : plugin.getConfig().getStringList("protect-from-player")) {
-            plugin.protectedFromPlayer.add(EntityType.fromName(entity));
-        }
 
-        for (String entity : plugin.getConfig().getStringList("protect-from-monsters"))
-            plugin.protectedFromMonster.add(EntityType.fromName(entity));
 
     }
 
@@ -30,7 +25,7 @@ public class DamageListener implements Listener {
         if (e.getDamager() instanceof Player) {
             Entity entity = e.getEntity();
             Player player = (Player) e.getDamager();
-            if (plugin.protectedFromPlayer.contains(entity.getType())
+            if (AnimalGuard.isProtectedFromPlayer(entity.getType())
                     && !WGBukkit.getPlugin().canBuild(player, entity.getLocation())) {
                 e.setCancelled(true);
                 player.sendMessage(cannotKillMobs);
@@ -46,7 +41,7 @@ public class DamageListener implements Listener {
                 Player player = (Player) projectile.getShooter();
                 Entity entity = e.getEntity();
 
-                if (plugin.protectedFromPlayer.contains(entity.getType())
+                if (AnimalGuard.isProtectedFromPlayer(entity.getType())
                         && !WGBukkit.getPlugin().canBuild(player, entity.getLocation())) {
                     e.setCancelled(true);
                     projectile.remove();
@@ -59,7 +54,7 @@ public class DamageListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onMonsterDamage(EntityDamageByEntityEvent e) {
         if (e.getDamager() instanceof Monster)
-            if (plugin.protectedFromMonster.contains(e.getEntityType()))
+            if (AnimalGuard.isProtectedFromMonster(e.getEntityType()))
                 e.setCancelled(true);
     }
 }

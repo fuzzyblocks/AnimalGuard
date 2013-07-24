@@ -15,10 +15,14 @@ import org.bukkit.inventory.ItemStack;
 
 public class InteractListener implements Listener {
 
-    private AnimalGuard plugin;
+    private static final ChatColor MSG_COLOR = ChatColor.DARK_RED;
+    // TODO: Make these strings configurable
+    private static final String SHEEP_SHEAR = MSG_COLOR + "You cannot shear sheep here!";
+    private static final String SHEEP_DYE   = MSG_COLOR + "You cannot dye sheep here!";
+    private static final String MOB_LEASH   = MSG_COLOR + "You cannot leash mobs here!";
+    private static final String COW_MILK    = MSG_COLOR + "You cannot milk cows here!";
 
-    public InteractListener(AnimalGuard instance) {
-        this.plugin = instance;
+    public InteractListener() {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -27,7 +31,7 @@ public class InteractListener implements Listener {
             Player player = e.getPlayer();
             if (!WGBukkit.getPlugin().canBuild(player, e.getEntity().getLocation()))
                 e.setCancelled(true);
-            player.sendMessage(ChatColor.DARK_RED + "You cannot shear sheep here!");
+            player.sendMessage(SHEEP_SHEAR);
         }
     }
 
@@ -57,7 +61,7 @@ public class InteractListener implements Listener {
                     player.updateInventory();
                 }
 
-                player.sendMessage(ChatColor.DARK_RED + "You cannot dye sheep here!");
+                player.sendMessage(SHEEP_DYE);
             }
         }
     }
@@ -69,9 +73,9 @@ public class InteractListener implements Listener {
         ItemStack item = player.getItemInHand();
         if ((item.getType() == Material.LEASH)
                 && !WGBukkit.getPlugin().canBuild(player, entity.getLocation())
-                && plugin.protectedFromPlayer.contains(entity.getType())) {
+                && AnimalGuard.isProtectedFromPlayer(entity.getType())) {
             e.setCancelled(true);
-            player.sendMessage(ChatColor.DARK_RED + "You cannot leash mobs here!");
+            player.sendMessage(MOB_LEASH);
         }
     }
 
@@ -83,9 +87,9 @@ public class InteractListener implements Listener {
         ItemStack item = player.getItemInHand( );
             if ((item.getType() == Material.BUCKET)
                 && !WGBukkit.getPlugin().canBuild(player, cow.getLocation())
-                && plugin.protectedFromPlayer.contains(EntityType.COW)) {
+                && AnimalGuard.isProtectedFromPlayer(EntityType.COW)) {
             e.setCancelled(true);
-            player.sendMessage(ChatColor.DARK_RED + "You cannot milk cows here!");
+            player.sendMessage(COW_MILK);
             }
         }
     }
