@@ -5,9 +5,7 @@ import net.fuzzyblocks.animalguard.AnimalGuard;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Sheep;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -74,6 +72,21 @@ public class InteractListener implements Listener {
                 && plugin.protectedFromPlayer.contains(entity.getType())) {
             e.setCancelled(true);
             player.sendMessage(ChatColor.DARK_RED + "You cannot leash mobs here!");
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onCowMilk(PlayerInteractEntityEvent e) {
+        if (e.getRightClicked() instanceof Cow) {
+        Player player = e.getPlayer();
+        Cow cow = (Cow) e.getRightClicked();
+        ItemStack item = player.getItemInHand( );
+            if ((item.getType() == Material.BUCKET)
+                && !WGBukkit.getPlugin().canBuild(player, cow.getLocation())
+                && plugin.protectedFromPlayer.contains(EntityType.COW)) {
+            e.setCancelled(true);
+            player.sendMessage(ChatColor.DARK_RED + "You cannot milk cows here!");
+            }
         }
     }
 }
