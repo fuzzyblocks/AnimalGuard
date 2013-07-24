@@ -45,7 +45,7 @@ public class CowMilkListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onCowMilk(PlayerInteractEntityEvent e) {
-        if (e.getRightClicked() instanceof Cow) {
+        if (e.getRightClicked().getType() == EntityType.COW) {
             Player player = e.getPlayer();
             Cow cow = (Cow) e.getRightClicked();
             ItemStack item = player.getItemInHand( );

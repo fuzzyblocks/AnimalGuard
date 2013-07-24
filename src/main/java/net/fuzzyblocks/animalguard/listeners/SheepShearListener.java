@@ -28,8 +28,8 @@ package net.fuzzyblocks.animalguard.listeners;
 
 import com.sk89q.worldguard.bukkit.WGBukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -42,7 +42,7 @@ public class SheepShearListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onSheepShear(PlayerShearEntityEvent e) {
-        if (e.getEntity() instanceof Sheep) {
+        if (e.getEntity().getType() == EntityType.SHEEP) {
             Player player = e.getPlayer();
             if (!WGBukkit.getPlugin().canBuild(player, e.getEntity().getLocation()))
                 e.setCancelled(true);

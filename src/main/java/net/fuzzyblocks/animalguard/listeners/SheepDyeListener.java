@@ -30,6 +30,7 @@ import com.sk89q.worldguard.bukkit.WGBukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
@@ -44,7 +45,7 @@ public class SheepDyeListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onSheepDye(PlayerInteractEntityEvent e) {
-        if (e.getRightClicked() instanceof Sheep) {
+        if (e.getRightClicked().getType() == EntityType.SHEEP) {
             Sheep sheep = (Sheep)e.getRightClicked();
             Player player = e.getPlayer();
             ItemStack item = player.getItemInHand();
