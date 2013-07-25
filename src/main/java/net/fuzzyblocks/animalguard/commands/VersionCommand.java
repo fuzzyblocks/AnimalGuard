@@ -47,18 +47,21 @@ public class VersionCommand extends AnimalGuardCommand {
 
         StringBuilder builder = new StringBuilder();
         List<String> authorList = plugin.getDescription().getAuthors();
-        for (int i = 0; i < authorList.size()-1; i++) {
-            builder.append(authorList.get(i)).append(", ");
+        int s = authorList.size();
+        if (s > 2) {
+            for (int i = 0; i < s - 1; i++) {
+                builder.append(authorList.get(i)).append(", ");
+            }
         }
-        builder.append(" and ").append(authorList.get(authorList.size()-1));
+        if (s > 1)
+            builder.append(authorList.get(s - 2)).append(" and ");
+        builder.append(authorList.get(s - 1));
         authors = builder.toString();
     }
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
         sender.sendMessage(colour2 + "AnimalGuard version: " + colour1 + plugin.getDescription().getVersion());
-
-
         sender.sendMessage(colour2 + "by: " + colour1 + authors);
     }
 }
