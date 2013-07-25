@@ -1,10 +1,11 @@
 package net.fuzzyblocks.animalguard.listeners;
 
-import com.sk89q.worldedit.Vector;
 import com.sk89q.worldguard.bukkit.WGBukkit;
-import static com.sk89q.worldguard.bukkit.BukkitUtil.*;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.fuzzyblocks.animalguard.AnimalGuard;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,10 +28,11 @@ public class DamageListener implements Listener {
         if (e.getDamager() instanceof Player) {
             Entity entity = e.getEntity();
             Player player = (Player) e.getDamager();
-            Vector vector = toVector(entity.getLocation());
             if (AnimalGuard.isProtectedFromPlayer(entity.getType())
                     && !WGBukkit.getPlugin().canBuild(player, entity.getLocation())) {
-                if ((entity instanceof Tameable) && allowPvpTameable) {
+                if ((entity instanceof Tameable)
+                        && allowPvpTameable
+                        && !getPvpAllowed(entity.getLocation())) {
                     e.setCancelled(true);
                     player.sendMessage(cannotKillMobs);
                 }
@@ -62,5 +64,10 @@ public class DamageListener implements Listener {
         if (e.getDamager() instanceof Monster)
             if (AnimalGuard.isProtectedFromMonster(e.getEntityType()))
                 e.setCancelled(true);
+    }
+
+    private boolean getPvpAllowed(Location loc) {
+        ApplicableRegionSet ars = WGBukkit.getRegionManager(loc.getWorld()).getApplicableRegions(loc);
+        return ars.allows(DefaultFlag.PVP);
     }
 }
