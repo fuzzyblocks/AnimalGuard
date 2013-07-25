@@ -41,17 +41,16 @@ import org.bukkit.inventory.ItemStack;
 public class CowMilkListener implements Listener {
 
     private static final ChatColor MSG_COLOR = ChatColor.DARK_RED;
-    private static final String COW_MILK    = MSG_COLOR + "You cannot milk cows here!";
+    private static final String COW_MILK     = MSG_COLOR + "You cannot milk cows here!";
 
     @EventHandler(ignoreCancelled = true)
     public void onCowMilk(PlayerInteractEntityEvent e) {
         if (e.getRightClicked().getType() == EntityType.COW) {
             Player player = e.getPlayer();
             Cow cow = (Cow) e.getRightClicked();
-            ItemStack item = player.getItemInHand( );
+            ItemStack item = player.getItemInHand();
             if ((item.getType() == Material.BUCKET)
-                    && !WGBukkit.getPlugin().canBuild(player, cow.getLocation())
-                    && AnimalGuard.isProtectedFromPlayer(EntityType.COW)) {
+                    && !WGBukkit.getPlugin().canBuild(player, cow.getLocation())) {
                 e.setCancelled(true);
                 player.sendMessage(COW_MILK);
             }

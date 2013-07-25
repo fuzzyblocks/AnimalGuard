@@ -16,8 +16,6 @@ public class DamageListener implements Listener {
 
     public DamageListener(AnimalGuard instance) {
         plugin = instance;
-
-
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

@@ -40,7 +40,7 @@ import org.bukkit.inventory.ItemStack;
 public class MobLeashListener implements Listener {
 
     private static final ChatColor MSG_COLOR = ChatColor.DARK_RED;
-    private static final String MOB_LEASH   = MSG_COLOR + "You cannot leash mobs here!";
+    private static final String MOB_LEASH    = MSG_COLOR + "You cannot leash mobs here!";
 
     @EventHandler(ignoreCancelled = true)
     public void onMobLeash(PlayerInteractEntityEvent e) {
@@ -48,8 +48,7 @@ public class MobLeashListener implements Listener {
         Entity entity = e.getRightClicked();
         ItemStack item = player.getItemInHand();
         if ((item.getType() == Material.LEASH)
-                && !WGBukkit.getPlugin().canBuild(player, entity.getLocation())
-                && AnimalGuard.isProtectedFromPlayer(entity.getType())) {
+                && !WGBukkit.getPlugin().canBuild(player, entity.getLocation())) {
             e.setCancelled(true);
             player.sendMessage(MOB_LEASH);
         }
