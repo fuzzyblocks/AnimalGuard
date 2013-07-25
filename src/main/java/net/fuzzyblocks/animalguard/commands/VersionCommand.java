@@ -34,6 +34,8 @@ import java.util.List;
 
 public class VersionCommand extends AnimalGuardCommand {
 
+    private String authors;
+
     public VersionCommand(AnimalGuard plugin) {
         super(plugin);
         this.setName("AnimalGuard: Version");
@@ -42,11 +44,21 @@ public class VersionCommand extends AnimalGuardCommand {
         this.addKey("animalguard version");
         this.addKey("ag version");
         this.setPermission("animalguard.version", "Allows this user to check AnimalGuard's version.", PermissionDefault.OP);
+
+        StringBuilder builder = new StringBuilder();
+        List<String> authorList = plugin.getDescription().getAuthors();
+        for (int i = 0; i < authorList.size()-1; i++) {
+            builder.append(authorList.get(i)).append(", ");
+        }
+        builder.append(" and ").append(authorList.get(authorList.size()-1));
+        authors = builder.toString();
     }
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
         sender.sendMessage(colour2 + "AnimalGuard version: " + colour1 + plugin.getDescription().getVersion());
-        sender.sendMessage(colour2 + "by: " + colour1 + "cedeel");
+
+
+        sender.sendMessage(colour2 + "by: " + colour1 + authors);
     }
 }
