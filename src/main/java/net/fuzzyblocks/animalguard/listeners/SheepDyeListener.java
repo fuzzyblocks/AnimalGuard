@@ -27,7 +27,7 @@
 package net.fuzzyblocks.animalguard.listeners;
 
 import com.sk89q.worldguard.bukkit.WGBukkit;
-import org.bukkit.ChatColor;
+import net.fuzzyblocks.animalguard.AnimalGuard;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -40,8 +40,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class SheepDyeListener implements Listener {
 
-    private static final ChatColor MSG_COLOR = ChatColor.DARK_RED;
-    private static final String SHEEP_DYE   = MSG_COLOR + "You cannot dye sheep here!";
+    private final String sheepDyeString;
+
+    public SheepDyeListener(AnimalGuard instance) {
+        sheepDyeString = instance.getMessage("sheep-dye");
+    }
 
     @EventHandler(ignoreCancelled = true)
     public void onSheepDye(PlayerInteractEntityEvent e) {
@@ -69,7 +72,7 @@ public class SheepDyeListener implements Listener {
                     player.updateInventory();
                 }
 
-                player.sendMessage(SHEEP_DYE);
+                player.sendMessage(sheepDyeString);
             }
         }
     }

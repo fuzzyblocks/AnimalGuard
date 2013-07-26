@@ -5,6 +5,7 @@ import net.fuzzyblocks.animalguard.commands.BaseCommand;
 import net.fuzzyblocks.animalguard.commands.ReloadCommand;
 import net.fuzzyblocks.animalguard.commands.VersionCommand;
 import net.fuzzyblocks.animalguard.listeners.*;
+import net.fuzzyblocks.animalguard.util.MessagesManager;
 import net.fuzzyblocks.animalguard.util.Updater;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -19,13 +20,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class AnimalGuard extends JavaPlugin {
 
     private CommandHandler commandHandler;
     private static List<EntityType> protectedFromPlayer = new ArrayList<>();
     private static List<EntityType> protectedFromMonster = new ArrayList<>();
-
+    private Map<String, String> messages;
     private boolean cowMilking, mobLeashing, sheepDying, sheepShearing, tameablePvp;
 
     //Enable stuff
@@ -66,6 +68,12 @@ public class AnimalGuard extends JavaPlugin {
         return protectedFromMonster.contains(type);
     }
 
+    public String getMessage(String messageId) {
+        if (messages == null)
+            messages = new MessagesManager(this).getMessages();
+        return messages.get(messageId);
+    }
+
     //Configuration setup
     private void setupConfig() {
         final FileConfiguration cfg = getConfig();
@@ -104,13 +112,13 @@ public class AnimalGuard extends JavaPlugin {
         PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvents(new DamageListener(this, tameablePvp), this);
         if (!sheepShearing)
-            pm.registerEvents(new SheepShearListener(), this);
+            pm.registerEvents(new SheepShearListener(this), this);
         if (!sheepDying)
-            pm.registerEvents(new SheepDyeListener(), this);
+            pm.registerEvents(new SheepDyeListener(this), this);
         if (!cowMilking)
-            pm.registerEvents(new CowMilkListener(), this);
+            pm.registerEvents(new CowMilkListener(this), this);
         if (!mobLeashing)
-            pm.registerEvents(new MobLeashListener(), this);
+            pm.registerEvents(new MobLeashListener(this), this);
     }
 
     private void updatePlugin() {

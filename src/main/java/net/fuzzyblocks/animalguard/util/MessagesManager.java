@@ -24,38 +24,43 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package net.fuzzyblocks.animalguard.listeners;
+package net.fuzzyblocks.animalguard.util;
 
-import com.sk89q.worldguard.bukkit.WGBukkit;
 import net.fuzzyblocks.animalguard.AnimalGuard;
-import org.bukkit.Material;
-import org.bukkit.entity.Cow;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.YamlConfiguration;
 
-public class CowMilkListener implements Listener {
+import java.io.File;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
-    private final String cowMilkString;
+public class MessagesManager {
 
-    public CowMilkListener(AnimalGuard instance) {
-        cowMilkString = instance.getMessage("cow-milk");
+    private final AnimalGuard instance;
+    private YamlConfiguration messages;
+    private File messagesFile;
+
+    public MessagesManager(AnimalGuard plugin) {
+        instance = plugin;
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onCowMilk(PlayerInteractEntityEvent e) {
-        if (e.getRightClicked().getType() == EntityType.COW) {
-            Player player = e.getPlayer();
-            Cow cow = (Cow) e.getRightClicked();
-            ItemStack item = player.getItemInHand();
-            if ((item.getType() == Material.BUCKET)
-                    && !WGBukkit.getPlugin().canBuild(player, cow.getLocation())) {
-                e.setCancelled(true);
-                player.sendMessage(cowMilkString);
-            }
-        }
+    public Map<String, String> getMessages() {
+        if (messages == null)
+            reloadMessages();
+        Map<String, String> result = new HashMap<>();
+        for (String s : messages.getKeys(false)) result.put(s,
+                ChatColor.translateAlternateColorCodes('&', messages.getString(s)));
+        return result;
+    }
+
+    private void reloadMessages() {
+        if (messagesFile == null)
+            messagesFile = new File(instance.getDataFolder(), "messages.yml");
+        messages = YamlConfiguration.loadConfiguration(messagesFile);
+
+        InputStream input = instance.getResource("messages.yml");
+        if (input != null)
+            messages.setDefaults(YamlConfiguration.loadConfiguration(input));
     }
 }

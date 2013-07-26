@@ -4,7 +4,6 @@ import com.sk89q.worldguard.bukkit.WGBukkit;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.fuzzyblocks.animalguard.AnimalGuard;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,12 +13,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 public class DamageListener implements Listener {
 
     public static AnimalGuard plugin;
-    String cannotKillMobs = ChatColor.DARK_RED + "You cannot attack mobs here!";
+    String cannotKillMobs;
     private boolean allowPvpTameable;
 
     public DamageListener(AnimalGuard instance, boolean tameablePvp) {
         plugin = instance;
         allowPvpTameable = tameablePvp;
+        cannotKillMobs = instance.getMessage("mob-attack");
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

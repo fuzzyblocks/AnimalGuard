@@ -27,7 +27,7 @@
 package net.fuzzyblocks.animalguard.listeners;
 
 import com.sk89q.worldguard.bukkit.WGBukkit;
-import org.bukkit.ChatColor;
+import net.fuzzyblocks.animalguard.AnimalGuard;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -37,8 +37,11 @@ import org.bukkit.event.player.PlayerShearEntityEvent;
 
 public class SheepShearListener implements Listener {
 
-    private static final ChatColor MSG_COLOR = ChatColor.DARK_RED;
-    private static final String SHEEP_SHEAR = MSG_COLOR + "You cannot shear sheep here!";
+    private final String sheepShearString;
+
+    public SheepShearListener(AnimalGuard instance) {
+        sheepShearString = instance.getMessage("sheep-shear");
+    }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onSheepShear(PlayerShearEntityEvent e) {
@@ -46,7 +49,7 @@ public class SheepShearListener implements Listener {
             Player player = e.getPlayer();
             if (!WGBukkit.getPlugin().canBuild(player, e.getEntity().getLocation()))
                 e.setCancelled(true);
-            player.sendMessage(SHEEP_SHEAR);
+            player.sendMessage(sheepShearString);
         }
     }
 }

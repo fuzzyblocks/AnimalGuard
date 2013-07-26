@@ -28,7 +28,6 @@ package net.fuzzyblocks.animalguard.listeners;
 
 import com.sk89q.worldguard.bukkit.WGBukkit;
 import net.fuzzyblocks.animalguard.AnimalGuard;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -39,8 +38,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class MobLeashListener implements Listener {
 
-    private static final ChatColor MSG_COLOR = ChatColor.DARK_RED;
-    private static final String MOB_LEASH    = MSG_COLOR + "You cannot leash mobs here!";
+    private final String mobLeashString;
+
+    public MobLeashListener(AnimalGuard instance) {
+        mobLeashString = instance.getMessage("mob-leash");
+    }
 
     @EventHandler(ignoreCancelled = true)
     public void onMobLeash(PlayerInteractEntityEvent e) {
@@ -50,7 +52,7 @@ public class MobLeashListener implements Listener {
         if ((item.getType() == Material.LEASH)
                 && !WGBukkit.getPlugin().canBuild(player, entity.getLocation())) {
             e.setCancelled(true);
-            player.sendMessage(MOB_LEASH);
+            player.sendMessage(mobLeashString);
         }
     }
 }
