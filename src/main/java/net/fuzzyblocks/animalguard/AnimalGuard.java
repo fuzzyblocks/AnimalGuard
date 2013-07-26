@@ -32,16 +32,9 @@ public class AnimalGuard extends JavaPlugin {
     @Override
     public void onEnable() {
         registerCommands();
-        registerEvents();
 
         // Config Setup
         setupConfig();
-
-        cowMilking = getConfig().getBoolean("allow-cow-milking", true);
-        mobLeashing = getConfig().getBoolean("allow-mob-leashing", false);
-        sheepDying = getConfig().getBoolean("allow-sheep-dye", false);
-        sheepShearing = getConfig().getBoolean("allow-sheep-shearing", false);
-        tameablePvp = getConfig().getBoolean("allow-pvp-tameable", true);
 
         // Fill the lists
         for (String entity : this.getConfig().getStringList("protect-from-player"))
@@ -49,6 +42,8 @@ public class AnimalGuard extends JavaPlugin {
 
         for (String entity : this.getConfig().getStringList("protect-from-monsters"))
             protectedFromMonster.add(EntityType.fromName(entity));
+
+        registerEvents();
 
         // Enable plugin metrics
         try {
@@ -80,6 +75,12 @@ public class AnimalGuard extends JavaPlugin {
         cfgOptions.header("Default Config for AnimalGuard");
         cfgOptions.copyHeader(true);
         saveConfig();
+
+        cowMilking = getConfig().getBoolean("allow-cow-milking", true);
+        mobLeashing = getConfig().getBoolean("allow-mob-leashing", false);
+        sheepDying = getConfig().getBoolean("allow-sheep-dye", false);
+        sheepShearing = getConfig().getBoolean("allow-sheep-shearing", false);
+        tameablePvp = getConfig().getBoolean("allow-pvp-tameable", true);
     }
 
     @Override

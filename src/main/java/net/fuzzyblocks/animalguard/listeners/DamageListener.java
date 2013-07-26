@@ -5,7 +5,6 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.fuzzyblocks.animalguard.AnimalGuard;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -28,14 +27,10 @@ public class DamageListener implements Listener {
         if (e.getDamager() instanceof Player) {
             Entity entity = e.getEntity();
             Player player = (Player) e.getDamager();
-            if (AnimalGuard.isProtectedFromPlayer(entity.getType())
-                    && !WGBukkit.getPlugin().canBuild(player, entity.getLocation())) {
-                if ((entity instanceof Tameable)
-                        && allowPvpTameable
-                        && !getPvpAllowed(entity.getLocation())) {
-                    e.setCancelled(true);
-                    player.sendMessage(cannotKillMobs);
-                }
+
+            if (blockDamage(player, entity)) {
+                e.setCancelled(true);
+                player.sendMessage(cannotKillMobs);
             }
         }
     }
@@ -47,13 +42,13 @@ public class DamageListener implements Listener {
             if (projectile.getShooter() instanceof Player) {
                 Player player = (Player) projectile.getShooter();
                 Entity entity = e.getEntity();
-                if (AnimalGuard.isProtectedFromPlayer(entity.getType())
-                        && !WGBukkit.getPlugin().canBuild(player, entity.getLocation())) {
-                    if (!(entity instanceof Tameable) || !allowPvpTameable) {
-                        e.setCancelled(true);
-                        projectile.remove();
-                        player.sendMessage(cannotKillMobs);
-                    }
+
+                if (blockDamage(player, entity)) {
+                    e.setCancelled(true);
+                    // Remove the projectile to prevent a glitch where the user gets spammed
+                    // and this event re-run until the chunk is unloaded.
+                    projectile.remove();
+                    player.sendMessage(cannotKillMobs);
                 }
             }
         }
@@ -66,8 +61,26 @@ public class DamageListener implements Listener {
                 e.setCancelled(true);
     }
 
-    private boolean getPvpAllowed(Location loc) {
-        ApplicableRegionSet ars = WGBukkit.getRegionManager(loc.getWorld()).getApplicableRegions(loc);
-        return ars.allows(DefaultFlag.PVP);
+    /**
+     * Check whether damage should be dealt
+     *
+     * @param player The player attempting to deal damage
+     * @param entity The entity being attacked
+     * @return Whether the damage should be dealt
+     */
+    private boolean blockDamage(Player player, Entity entity) {
+        boolean result = false;
+        if (AnimalGuard.isProtectedFromPlayer(entity.getType())
+                && !WGBukkit.getPlugin().canBuild(player, entity.getLocation())) {
+            result = true;
+        }
+
+        if (entity instanceof Tameable && allowPvpTameable) {
+            // Should *not* block if PvP is allowed.
+            ApplicableRegionSet ars = WGBukkit.getRegionManager(entity.getWorld()).getApplicableRegions(entity.getLocation());
+            result = !ars.allows(DefaultFlag.PVP);
+        }
+
+        return result;
     }
 }
