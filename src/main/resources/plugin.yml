@@ -7,4 +7,5 @@ depends: WorldGuard
 commands:
    animalguard:
        description: 'General AnimalGuard Commands'
-       usage: /animalguard /animalguard -reload
+       usage: /animalguard
+       aliases: ag
