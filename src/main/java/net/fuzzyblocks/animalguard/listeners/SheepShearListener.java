@@ -47,9 +47,10 @@ public class SheepShearListener implements Listener {
     public void onSheepShear(PlayerShearEntityEvent e) {
         if (e.getEntity().getType() == EntityType.SHEEP) {
             Player player = e.getPlayer();
-            if (!WGBukkit.getPlugin().canBuild(player, e.getEntity().getLocation()))
+            if (!WGBukkit.getPlugin().canBuild(player, e.getEntity().getLocation())) {
                 e.setCancelled(true);
-            player.sendMessage(sheepShearString);
+                player.sendMessage(sheepShearString);
+            }
         }
     }
 }
