@@ -4,6 +4,7 @@ auto-download-updates: false
 allow-pvp-tameable: true
 allow-sheep-shearing: false
 allow-sheep-dye: false
+allow-mooshroom-shearing: false
 allow-mob-leashing: false
 allow-cow-milking: true
 protect-from-player:
