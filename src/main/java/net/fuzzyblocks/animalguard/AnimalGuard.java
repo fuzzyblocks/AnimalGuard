@@ -28,7 +28,7 @@ public class AnimalGuard extends JavaPlugin {
     private static List<EntityType> protectedFromPlayer = new ArrayList<>();
     private static List<EntityType> protectedFromMonster = new ArrayList<>();
     private Map<String, String> messages;
-    private boolean cowMilking, mobLeashing, sheepDying, sheepShearing, mooshroomShearing, tameablePvp;
+    private boolean cowMilking, mobLeashing, sheepDying, sheepShearing, mooshroomShearing, tameablePvp, vehicleTheft;
 
     //Enable stuff
     @Override
@@ -90,6 +90,7 @@ public class AnimalGuard extends JavaPlugin {
         sheepShearing = getConfig().getBoolean("allow-sheep-shearing", false);
         mooshroomShearing = getConfig().getBoolean("allow-mooshroom-shearing", false);
         tameablePvp = getConfig().getBoolean("allow-pvp-tameable", true);
+        vehicleTheft = getConfig().getBoolean("allow-vehicle-riding", false);
     }
 
     @Override
@@ -122,6 +123,8 @@ public class AnimalGuard extends JavaPlugin {
             pm.registerEvents(new MobLeashListener(this), this);
         if (!mooshroomShearing)
             pm.registerEvents(new MooshroomShearListener(this), this);
+        if (!vehicleTheft)
+            pm.registerEvents(new VehicleListener(this), this);
     }
 
     private void updatePlugin() {
