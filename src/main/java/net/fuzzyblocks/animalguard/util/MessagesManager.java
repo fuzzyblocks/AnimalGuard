@@ -43,6 +43,7 @@ public class MessagesManager {
 
     public MessagesManager(AnimalGuard plugin) {
         instance = plugin;
+        saveDefaultMessages();
     }
 
     public Map<String, String> getMessages() {
@@ -62,5 +63,12 @@ public class MessagesManager {
         InputStream input = instance.getResource("messages.yml");
         if (input != null)
             messages.setDefaults(YamlConfiguration.loadConfiguration(input));
+    }
+
+    private void saveDefaultMessages() {
+        if (messagesFile == null)
+            messagesFile = new File(instance.getDataFolder(), "messages.yml");
+        if (!messagesFile.exists())
+            instance.saveResource("messages.yml", false);
     }
 }
