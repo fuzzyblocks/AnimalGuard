@@ -36,12 +36,10 @@ import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 
 public class VehicleListener implements Listener {
-    private static AnimalGuard plugin;
     private final String cannotEnterVehicle;
     private final String cannotLeaveVehicle;
 
     public VehicleListener(AnimalGuard instance) {
-        plugin = instance;
         cannotEnterVehicle = instance.getMessage("mob-enter-vehicle");
         cannotLeaveVehicle = instance.getMessage("mob-leave-vehicle");
     }

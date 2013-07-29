@@ -12,8 +12,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class DamageListener implements Listener {
 
-    public static AnimalGuard plugin;
-    String cannotKillMobs;
+    private static AnimalGuard plugin;
+    private String cannotKillMobs;
     private boolean allowPvpTameable;
 
     public DamageListener(AnimalGuard instance, boolean tameablePvp) {
