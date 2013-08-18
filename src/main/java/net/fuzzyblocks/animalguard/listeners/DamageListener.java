@@ -1,10 +1,11 @@
 package net.fuzzyblocks.animalguard.listeners;
 
-import com.sk89q.worldguard.bukkit.WGBukkit;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.fuzzyblocks.animalguard.AnimalGuard;
-import org.bukkit.entity.*;
+import net.fuzzyblocks.animalguard.util.PermissionCheck;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Monster;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -14,11 +15,9 @@ public class DamageListener implements Listener {
 
     private static AnimalGuard plugin;
     private String cannotKillMobs;
-    private boolean allowPvpTameable;
 
-    public DamageListener(AnimalGuard instance, boolean tameablePvp) {
+    public DamageListener(AnimalGuard instance) {
         plugin = instance;
-        allowPvpTameable = tameablePvp;
         cannotKillMobs = instance.getMessage("mob-attack");
     }
 
@@ -28,7 +27,7 @@ public class DamageListener implements Listener {
             Entity entity = e.getEntity();
             Player player = (Player) e.getDamager();
 
-            if (blockDamage(player, entity)) {
+            if (PermissionCheck.blockDamage(player, entity)) {
                 e.setCancelled(true);
                 player.sendMessage(cannotKillMobs);
             }
@@ -43,7 +42,7 @@ public class DamageListener implements Listener {
                 Player player = (Player) projectile.getShooter();
                 Entity entity = e.getEntity();
 
-                if (blockDamage(player, entity)) {
+                if (PermissionCheck.blockDamage(player, entity)) {
                     e.setCancelled(true);
                     // Remove the projectile to prevent a glitch where the user gets spammed
                     // and this event re-run until the chunk is unloaded.
@@ -59,28 +58,5 @@ public class DamageListener implements Listener {
         if (e.getDamager() instanceof Monster)
             if (AnimalGuard.isProtectedFromMonster(e.getEntityType()))
                 e.setCancelled(true);
-    }
-
-    /**
-     * Check whether damage should be dealt
-     *
-     * @param player The player attempting to deal damage
-     * @param entity The entity being attacked
-     * @return Whether the damage should be dealt
-     */
-    private boolean blockDamage(Player player, Entity entity) {
-        boolean result = false;
-        if (AnimalGuard.isProtectedFromPlayer(entity.getType())
-                && !WGBukkit.getPlugin().canBuild(player, entity.getLocation())) {
-            result = true;
-        }
-
-        if (entity instanceof Tameable && allowPvpTameable) {
-            // Should *not* block if PvP is allowed.
-            ApplicableRegionSet ars = WGBukkit.getRegionManager(entity.getWorld()).getApplicableRegions(entity.getLocation());
-            result = !ars.allows(DefaultFlag.PVP);
-        }
-
-        return result;
     }
 }

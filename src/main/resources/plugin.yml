@@ -4,6 +4,7 @@ description: An animal protection plugin for use in conjunction with WorldGuard.
 authors: [cedeel,Lanky_Lord]
 main: net.fuzzyblocks.animalguard.AnimalGuard
 depends: WorldGuard
+softdepend: [WGCustomFlags]
 commands:
    animalguard:
        description: 'General AnimalGuard Commands'

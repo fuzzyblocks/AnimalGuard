@@ -25,8 +25,8 @@
 */
 package net.fuzzyblocks.animalguard.listeners;
 
-import com.sk89q.worldguard.bukkit.WGBukkit;
 import net.fuzzyblocks.animalguard.AnimalGuard;
+import net.fuzzyblocks.animalguard.util.PermissionCheck;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,7 +48,7 @@ public class VehicleListener implements Listener {
     public void onVehicleEntry(VehicleEnterEvent e) {
         if (e.getVehicle() instanceof Animals) {
             Player player = (Player) e.getEntered();
-            if (!WGBukkit.getPlugin().canBuild(player, e.getVehicle().getLocation())) {
+            if (PermissionCheck.blockInteract(player, e.getVehicle())) {
                 e.setCancelled(true);
                 player.sendMessage(cannotEnterVehicle);
             }
@@ -59,7 +59,7 @@ public class VehicleListener implements Listener {
     public void onVehicleExit(VehicleExitEvent e) {
         if (e.getVehicle() instanceof Animals) {
             Player player = (Player) e.getExited();
-            if (!WGBukkit.getPlugin().canBuild(player, e.getVehicle().getLocation())) {
+            if (PermissionCheck.blockInteract(player, e.getVehicle())) {
                 e.setCancelled(true);
                 player.sendMessage(cannotLeaveVehicle);
             }
