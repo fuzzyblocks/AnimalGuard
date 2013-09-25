@@ -57,7 +57,7 @@ public class AnimalGuard extends JavaPlugin {
         // Enable plugin metrics
         try {
             MetricsLite metrics = new MetricsLite(this);
-            metrics.enable();
+            metrics.start();
         } catch (IOException e) {
             getLogger().info("An error occurred while posting results to the Metrics.");
             getLogger().warning(e.getLocalizedMessage());
