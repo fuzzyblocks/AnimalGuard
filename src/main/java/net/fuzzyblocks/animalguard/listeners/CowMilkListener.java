@@ -26,8 +26,8 @@
 */
 package net.fuzzyblocks.animalguard.listeners;
 
+import com.sk89q.worldguard.bukkit.WGBukkit;
 import net.fuzzyblocks.animalguard.AnimalGuard;
-import net.fuzzyblocks.animalguard.util.PermissionCheck;
 import org.bukkit.Material;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.EntityType;
@@ -52,7 +52,7 @@ public class CowMilkListener implements Listener {
             Cow cow = (Cow) e.getRightClicked();
             ItemStack item = player.getItemInHand();
             if ((item.getType() == Material.BUCKET)
-                    && PermissionCheck.blockInteract(player, cow)) {
+                    && !WGBukkit.getPlugin().canBuild(player, cow.getLocation())) {
                 e.setCancelled(true);
                 player.sendMessage(cowMilkString);
             }

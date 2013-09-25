@@ -50,9 +50,8 @@ public class MessagesManager {
         if (messages == null)
             reloadMessages();
         Map<String, String> result = new HashMap<>();
-        for (String s : messages.getKeys(false))
-            result.put(s,
-                    ChatColor.translateAlternateColorCodes('&', messages.getString(s)));
+        for (String s : messages.getKeys(false)) result.put(s,
+                ChatColor.translateAlternateColorCodes('&', messages.getString(s)));
         return result;
     }
 

@@ -26,8 +26,8 @@
 */
 package net.fuzzyblocks.animalguard.listeners;
 
+import com.sk89q.worldguard.bukkit.WGBukkit;
 import net.fuzzyblocks.animalguard.AnimalGuard;
-import net.fuzzyblocks.animalguard.util.PermissionCheck;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -49,11 +49,11 @@ public class SheepDyeListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onSheepDye(PlayerInteractEntityEvent e) {
         if (e.getRightClicked().getType() == EntityType.SHEEP) {
-            Sheep sheep = (Sheep) e.getRightClicked();
+            Sheep sheep = (Sheep)e.getRightClicked();
             Player player = e.getPlayer();
             ItemStack item = player.getItemInHand();
             if (item.getType() == Material.INK_SACK
-                    && PermissionCheck.blockInteract(player, e.getRightClicked())) {
+                    && !WGBukkit.getPlugin().canBuild(player, sheep.getLocation())) {
 
                 // Cancel dye
                 e.setCancelled(true);

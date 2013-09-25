@@ -26,8 +26,8 @@
 */
 package net.fuzzyblocks.animalguard.listeners;
 
+import com.sk89q.worldguard.bukkit.WGBukkit;
 import net.fuzzyblocks.animalguard.AnimalGuard;
-import net.fuzzyblocks.animalguard.util.PermissionCheck;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,7 +47,7 @@ public class SheepShearListener implements Listener {
     public void onSheepShear(PlayerShearEntityEvent e) {
         if (e.getEntity().getType() == EntityType.SHEEP) {
             Player player = e.getPlayer();
-            if (PermissionCheck.blockInteract(player, e.getEntity())) {
+            if (!WGBukkit.getPlugin().canBuild(player, e.getEntity().getLocation())) {
                 e.setCancelled(true);
                 player.sendMessage(sheepShearString);
             }

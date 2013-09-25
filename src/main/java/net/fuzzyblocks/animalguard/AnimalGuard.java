@@ -1,21 +1,17 @@
 package net.fuzzyblocks.animalguard;
 
-import com.mewin.WGCustomFlags.WGCustomFlagsPlugin;
 import com.pneumaticraft.commandhandler.CommandHandler;
-import com.sk89q.worldguard.protection.flags.StateFlag;
 import net.fuzzyblocks.animalguard.commands.BaseCommand;
 import net.fuzzyblocks.animalguard.commands.ReloadCommand;
 import net.fuzzyblocks.animalguard.commands.VersionCommand;
 import net.fuzzyblocks.animalguard.listeners.*;
 import net.fuzzyblocks.animalguard.util.MessagesManager;
-import net.fuzzyblocks.animalguard.util.PermissionCheck;
 import net.fuzzyblocks.animalguard.util.Updater;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.FileConfigurationOptions;
 import org.bukkit.entity.EntityType;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.MetricsLite;
@@ -28,7 +24,6 @@ import java.util.Map;
 
 public class AnimalGuard extends JavaPlugin {
 
-    public static StateFlag DAMAGE_ANIMALS = new StateFlag("damage-animals", false);
     private CommandHandler commandHandler;
     private static List<EntityType> protectedFromPlayer = new ArrayList<>();
     private static List<EntityType> protectedFromMonster = new ArrayList<>();
@@ -50,8 +45,6 @@ public class AnimalGuard extends JavaPlugin {
         for (String entity : this.getConfig().getStringList("protect-from-monsters"))
             protectedFromMonster.add(EntityType.fromName(entity));
 
-        setupCustomFlags();
-        PermissionCheck permissionCheck = new PermissionCheck(tameablePvp);
         registerEvents();
 
         // Enable plugin metrics
@@ -119,7 +112,7 @@ public class AnimalGuard extends JavaPlugin {
 
     private void registerEvents() {
         PluginManager pm = this.getServer().getPluginManager();
-        pm.registerEvents(new DamageListener(this), this);
+        pm.registerEvents(new DamageListener(this, tameablePvp), this);
         if (!sheepShearing)
             pm.registerEvents(new SheepShearListener(this), this);
         if (!sheepDying)
@@ -143,13 +136,5 @@ public class AnimalGuard extends JavaPlugin {
             if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE)
                 this.getLogger().info("There is an update availible on BukkitDev");
         }
-    }
-
-    private void setupCustomFlags() {
-        Plugin plugin = getServer().getPluginManager().getPlugin("WGCustomFlags");
-        if (plugin == null || !(plugin instanceof WGCustomFlagsPlugin))
-            return;
-        else
-            ((WGCustomFlagsPlugin) plugin).addCustomFlag(DAMAGE_ANIMALS);
     }
 }

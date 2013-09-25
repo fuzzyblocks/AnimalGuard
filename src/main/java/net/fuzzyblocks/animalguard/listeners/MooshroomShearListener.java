@@ -26,13 +26,13 @@
 */
 package net.fuzzyblocks.animalguard.listeners;
 
+import com.sk89q.worldguard.bukkit.WGBukkit;
 import net.fuzzyblocks.animalguard.AnimalGuard;
-import net.fuzzyblocks.animalguard.util.PermissionCheck;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 
 public class MooshroomShearListener implements Listener {
@@ -47,7 +47,7 @@ public class MooshroomShearListener implements Listener {
     public void onMooshroomShear(PlayerShearEntityEvent e) {
         if (e.getEntity().getType() == EntityType.MUSHROOM_COW) {
             Player player = e.getPlayer();
-            if (PermissionCheck.blockInteract(player, e.getEntity())) {
+            if (!WGBukkit.getPlugin().canBuild(player, e.getEntity().getLocation())) {
                 e.setCancelled(true);
                 player.sendMessage(mooshroomShearString);
             }

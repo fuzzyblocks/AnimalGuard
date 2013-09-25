@@ -133,11 +133,5 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.mewin</groupId>
-            <artifactId>WGCustomFlags</artifactId>
-            <version>1.5.3</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 </project>
